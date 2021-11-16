@@ -1,24 +1,10 @@
 import "package:flutter/material.dart";
 
-class Register extends StatelessWidget{
 
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '注册',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: RegisterPage(title:'Register') ,
-    );
-  }
+class Register extends StatefulWidget{
 
-}
-
-class RegisterPage extends StatefulWidget{
-
-  RegisterPage({Key?key,required this.title}) : super(key:key);
+  Register({Key?key,required this.title}) : super(key:key);
   final String title;
 
 
@@ -26,46 +12,74 @@ class RegisterPage extends StatefulWidget{
   _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage>{
+class _RegisterPageState extends State<Register>{
 
+  var _dropdownValue_company = "1";
+  var _dropdownValue_project = "1";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset:false,
-      body: Center(
-        child: ListView(
+    return MaterialApp(
+      home: Scaffold(
+        resizeToAvoidBottomInset:false,
+        appBar: AppBar(
+          leading: BackButton(
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        body: Center(
+            child: ListView(
               children: <Widget>[
                 Padding(
                   padding:const EdgeInsets.fromLTRB(30.0, 50.0, 30.0, 0.0),
-                  child: TextField(
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderSide:BorderSide(
-                                width: 3,
-                                color: Colors.green
-                            )
-                        ),
-                        hintText: '请输入公司名称',
-                        labelText: '公司：'
-                    ),
+                  child: Row(
+                    children: <Widget>[
+                      Text("选择公司：",style: TextStyle(fontSize: 15),),
+                      DropdownButton(
+                        value: _dropdownValue_company,
+                        items: [
+                          DropdownMenuItem(child: Text("11111111"),value: "1",),
+                          DropdownMenuItem(child: Text("22222222"),value: "2",),
+                          DropdownMenuItem(child: Text("33333333"),value: "3",),
+                          DropdownMenuItem(child: Text("44444444"),value: "4",),
+                          DropdownMenuItem(child: Text("55555555"),value: "5",),
+                          DropdownMenuItem(child: Text("66666666"),value: "6",),
+                          DropdownMenuItem(child: Text("77777777"),value: "7",),
+                        ],
+                        onChanged: (value){
+                          setState(() {
+                            _dropdownValue_company = value.toString();
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
-                  padding:const EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 0.0),
-                  child: TextField(
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderSide:BorderSide(
-                                width: 3,
-                                color: Colors.green
-                            )
-                        ),
-                        hintText: '请输入公司项目',
-                        labelText: '项目：'
-                    ),
+                  padding:const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 0.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text("选择项目：",style: TextStyle(fontSize: 15),),
+                      DropdownButton(
+                        value: _dropdownValue_project,
+                        items: [
+                          DropdownMenuItem(child: Text("11111111"),value: "1",),
+                          DropdownMenuItem(child: Text("22222222"),value: "2",),
+                          DropdownMenuItem(child: Text("33333333"),value: "3",),
+                          DropdownMenuItem(child: Text("44444444"),value: "4",),
+                          DropdownMenuItem(child: Text("55555555"),value: "5",),
+                          DropdownMenuItem(child: Text("66666666"),value: "6",),
+                          DropdownMenuItem(child: Text("77777777"),value: "7",),
+                        ],
+                        onChanged: (value){
+                          setState(() {
+                            _dropdownValue_project = value.toString();
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -154,6 +168,7 @@ class _RegisterPageState extends State<RegisterPage>{
               ],
             )
 
+        ),
       ),
     );
   }

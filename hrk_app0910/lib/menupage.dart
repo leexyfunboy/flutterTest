@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hrk_app0910/login.dart';
+import 'package:hrk_app0910/Login.dart';
 import 'package:hrk_app0910/main.dart';
 import 'package:hrk_app0910/register.dart';
 
@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _currBody = MyApp();
         break;
       case 1:
-        _currBody = Register();
+        _currBody = Register(title: '',);
         break;
     }
     setState(() {

@@ -12,9 +12,6 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
-
 class Login extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -92,16 +89,21 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-
+  /**
+   * 向SharedPreferences中写入当前登录用户的账号输入信息
+   */
   Future<void> setSharedPreferences_logininfo(String userinput) async{
     SharedPreferences _sp = await SharedPreferences.getInstance();
     _sp.setString("userinput", userinput);
   }
 
+  /**
+   * 获取SharedPreferences中写入的当前登录用户的账号输入信息
+   */
   Future<String> getSharedPreferences_logininfo() async{
     SharedPreferences _sp = await SharedPreferences.getInstance();
     String res = _sp.getString("userinput");
-    print("getSp:::"+res);
+    // print("getSp:::"+res);
     return Future.value(res);
   }
 
@@ -225,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                             context,
                             new MaterialPageRoute(
-                                builder: (context) => new Register()),
+                                builder: (context) => new Register(title: '',)),
                           );
                         },
                         child: Text('注册'),

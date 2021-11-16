@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 class DartHttpUtils {
   //配置dio，通过BaseOptions
   Dio _dio = Dio(BaseOptions(
-      baseUrl: "http://192.168.101.6:8080/HRK_server0729",
+      baseUrl: "http://262tf89717.zicp.vip/HRK_server0729",
       connectTimeout: 5000,
       receiveTimeout: 5000));
 
@@ -44,6 +44,9 @@ class DartHttpUtils {
   }
 
 //发送POST请求，application/x-www-form-urlencoded
+  /**
+   * 向服务器servlet的login发送登录验证请求
+   */
   Future<String> postUrlencodedDio(String userinput,String userpassword) async {
     var url = "/login";
     String res = "";
@@ -53,6 +56,29 @@ class DartHttpUtils {
             contentType: "application/x-www-form-urlencoded"
           )
         ).then((Response response) {
+      if (response.statusCode == 200) {
+        res = response.data.toString();
+        print("statuscode::: "+response.statusCode.toString());
+        print("data::: "+response.data.toString());
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
+    return res;
+  }
+
+  /**
+   * 获取登录用户的User对象
+   */
+  Future<String> search_Userinfo(String userinput) async {
+    var url = "/userinfo";
+    String res = "";
+    await _dio.post(url,
+        data: {"userid": userinput},
+        options: Options(
+            contentType: "application/x-www-form-urlencoded"
+        )
+    ).then((Response response) {
       if (response.statusCode == 200) {
         res = response.data.toString();
         print("statuscode::: "+response.statusCode.toString());

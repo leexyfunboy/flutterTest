@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hrk_app0910/twoPages/ChartPage.dart';
-import 'package:hrk_app0910/twoPages/TabViewPage.dart';
 import 'package:hrk_app0910/twoPages/TextPage.dart';
 
 class DataPage extends StatefulWidget{
@@ -36,11 +35,12 @@ class _DataPageState extends State<DataPage>{
         body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Container(
+            Card(
               // width: 120,
               // height: 40,
-              margin: EdgeInsets.fromLTRB(5, 25, 5, 5),
-              color: Colors.white,
+              shadowColor: Colors.grey,
+              margin: EdgeInsets.fromLTRB(10, 25, 10, 5),
+              color: Colors.white70,
               child: Row(
                 children: <Widget>[
                   Padding(
@@ -82,6 +82,7 @@ class _DataPageState extends State<DataPage>{
             Flexible(
               fit: FlexFit.tight,
               child:Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 width: 400,
                 height: 600,
                 child: PageView(
