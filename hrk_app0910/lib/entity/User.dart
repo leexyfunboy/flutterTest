@@ -1,35 +1,51 @@
-import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class User{
+part 'user.g.dart';
 
-  var userid;
-  var username;
-  var telephone;
-  var email;
-  var password;
-  var companyid;
-  var projectid;
-  var deptid;
-  var authority_message;
-  var authority_action;
-  var authority_admin;
-  var job_status;
-  var note;
 
-  // User();
+@JsonSerializable()
+class User extends Object with _$UserSerializerMixin{
 
-  User(
-      this.userid,
-      this.username,
-      this.telephone,
-      this.email,
-      this.password,
-      this.companyid,
-      this.projectid,
-      this.deptid,
-      this.authority_message,
-      this.authority_action,
-      this.authority_admin,
-      this.job_status,
-      this.note);
+  @JsonKey(name: 'userid')
+  String userid;
+
+  @JsonKey(name: 'username')
+  String username;
+
+  @JsonKey(name: 'telephone')
+  String telephone;
+
+  @JsonKey(name: 'email')
+  String email;
+
+  @JsonKey(name: 'password')
+  String password;
+
+  @JsonKey(name: 'companyid')
+  String companyid;
+
+  @JsonKey(name: 'projectid')
+  String projectid;
+
+  @JsonKey(name: 'deptid')
+  String deptid;
+
+  @JsonKey(name: 'authority_message')
+  int authorityMessage;
+
+  @JsonKey(name: 'authority_action')
+  int authorityAction;
+
+  @JsonKey(name: 'authority_admin')
+  int authorityAdmin;
+
+  @JsonKey(name: 'job_status')
+  int jobStatus;
+
+  User(this.userid,this.username,this.telephone,this.email,this.password,this.companyid,this.projectid,this.deptid,this.authorityMessage,this.authorityAction,this.authorityAdmin,this.jobStatus,);
+
+  factory User.fromJson(Map<String, dynamic> srcJson) => _$UserFromJson(srcJson);
+
 }
+
+
