@@ -1,9 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hrk_app0910/main.dart';
 import 'package:dio/dio.dart';
 import 'package:hrk_app0910/mainmenu.dart';
-import 'package:hrk_app0910/menupage.dart';
 import 'package:hrk_app0910/register.dart';
 import 'package:hrk_app0910/tools/DartHttpUtil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,6 +10,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+//外部存储
+import 'package:path_provider/path_provider.dart';
+
 
 class Login extends StatelessWidget {
   // This widget is the root of your application.
@@ -45,9 +47,8 @@ class _LoginPageState extends State<LoginPage> {
   var _tf_userinput = new TextEditingController();
   var _tf_userpassword = new TextEditingController();
 
-
   //核验两个输入框的输入
-  void checkuserinputForm(){
+  void checkuserinputForm(String phoneKey){
     String userinput = _tf_userinput.text.toString();
     String userpassword = _tf_userpassword.text.toString();
     print("userinput::"+userinput);
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
       print("Toast::");
     }else{
       userpassword = transformToMD5(userpassword).toString();
-      _login(userinput,userpassword).then((value){
+      _login(userinput,userpassword,phoneKey).then((value){
         String res = value;
         print("res ::"+res);
         toNextMainmenu(res);
@@ -89,6 +90,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+
+
   /**
    * 向SharedPreferences中写入当前登录用户的账号输入信息
    */
@@ -106,8 +109,6 @@ class _LoginPageState extends State<LoginPage> {
     // print("getSp:::"+res);
     return Future.value(res);
   }
-
-
 
   //Toast提示（公共）
   void showToast(String msg){
@@ -142,6 +143,59 @@ class _LoginPageState extends State<LoginPage> {
         print("_tf_userinput.text ==> "+_tf_userinput.text);
       }
     });
+  }
+
+
+  /**
+   * 获取手机的SD卡中的phonekey
+   */
+  void writePhoneKey() async{
+    // Directory tempDir = await getTemporaryDirectory();
+    // String tempPath = tempDir.path;
+    // print("tempPath::"+tempPath);
+    //
+    // Directory appDocDir = await getApplicationDocumentsDirectory();
+    // String appDocPath = appDocDir.path;
+    // print("appDocPath::"+appDocPath);
+    
+    String filePath ="";
+    await _requestExternalStorageDirectories(StorageDirectory.documents).then((value){
+      filePath = value;
+    });
+    print("external storage path:::"+filePath);
+
+    File f = File(filePath+"/hrk_key.txt");
+    f.writeAsString("745525d0853a4d5ba25ff1fb71abe764");
+
+  }
+
+  Future<String> getPhoneKey() async{
+    String filePath ="";
+    String res = "";
+    await _requestExternalStorageDirectories(StorageDirectory.documents).then((value){
+      filePath = value;
+    });
+    print("external storage path:::"+filePath);
+
+    File f = File(filePath+"/hrk_key.txt");
+    await f.readAsString().then((value){
+      res = value;
+    });
+    print("hrk_key.txt::content::"+res);
+    return res;
+  }
+
+  /**
+   * 获取SD卡的路径
+   */
+  Future<String> _requestExternalStorageDirectories(StorageDirectory type) async {
+    String res = "";
+    await getExternalStorageDirectories(type: type).then((value){
+      print("_externalStorageDirectories"+value![0].toString());
+      res = value[0].path;
+    });
+
+    return res;
   }
 
   @override
@@ -210,7 +264,13 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       ElevatedButton(
-                        onPressed: ()=>checkuserinputForm(),
+                        onPressed: (){
+                          getPhoneKey().then((value){
+                            setState(() {
+                              checkuserinputForm(value);
+                            });
+                          });
+                        },
                         //     (){
                         //   Navigator.push(
                         //       context,
@@ -224,6 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       ElevatedButton(
                         onPressed: (){
+                          writePhoneKey();
                           Navigator.push(
                             context,
                             new MaterialPageRoute(
@@ -246,12 +307,12 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-Future<String> _login(String userinput,String userpassword) async {
+Future<String> _login(String userinput,String userpassword,String phoneKey) async {
   Response response;
   String res ;
   DartHttpUtils dartHttpUtils = new DartHttpUtils();
   //dartHttpUtils.getParametersDio();
-  res = await dartHttpUtils.postUrlencodedDio(userinput,userpassword);
+  res = await dartHttpUtils.postUrlencodedDio(userinput,userpassword,phoneKey);
   // dio.options.baseUrl = "http://192.168.101.3:8080/HRK_server0729";
   // dio.options.connectTimeout = 5000;
   // dio.options.receiveTimeout = 3000;

@@ -3,7 +3,7 @@ import 'package:hrk_app0910/fragments/ControlPage.dart';
 import 'package:hrk_app0910/fragments/DataPage.dart';
 import 'package:hrk_app0910/fragments/UserPage.dart';
 
-class MyTab extends StatefulWidget{
+class MyTab extends StatefulWidget {
 
 
   @override
@@ -17,12 +17,16 @@ class _TabState extends State<MyTab>{
   int _currentIndex = 0;
   List _pageList=[DataPage(),ControlPage(),UserPage()];
 
+  var pages = <Widget>[DataPage(),ControlPage(),UserPage()];
   @override
   Widget build(BuildContext context) {
 
     return MaterialApp(
       home: Scaffold(
-        body: _pageList[_currentIndex],
+        body: IndexedStack(
+          index: _currentIndex,
+          children: pages
+        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
